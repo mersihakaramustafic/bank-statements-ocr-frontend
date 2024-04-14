@@ -1,3 +1,9 @@
+import { Heading } from "@chakra-ui/react";
+
 export default function Home() {
-  return <main>OCR</main>;
+  return (
+    <main>
+      <Heading>OCR</Heading>
+    </main>
+  );
 }
