@@ -1,14 +1,16 @@
 "use client";
-import { Container, Heading, useToast } from "@chakra-ui/react";
+import { Box, Container, Heading, useToast } from "@chakra-ui/react";
 import { useState } from "react";
 import axios from "axios";
 import { API_URL } from "@/constants";
 
 import FileUploader from "./components/FileUploader";
+import { Remittance } from "@/types";
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
   const toast = useToast();
+  const [remittance, setRemittance] = useState<Remittance | null>(null);
 
   const handleOnDrop = async (acceptedFiles: File[]) => {
     setIsLoading(true);
@@ -23,6 +25,9 @@ export default function Home() {
           "Content-Type": "multipart/form-data",
         },
       });
+      const data: Remittance = resp.data;
+
+      setRemittance(data);
     } catch (error) {
       if (error instanceof Error) {
         toast({
@@ -41,7 +46,11 @@ export default function Home() {
         <Heading textAlign="center" mb="2">
           Bank Statements OCR
         </Heading>
-        <FileUploader onDrop={handleOnDrop} isLoading={isLoading} />
+        {remittance ? (
+          <Box>{JSON.stringify(remittance)}</Box>
+        ) : (
+          <FileUploader onDrop={handleOnDrop} isLoading={isLoading} />
+        )}
       </Container>
     </main>
   );
